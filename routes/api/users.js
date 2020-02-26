@@ -5,6 +5,22 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../../models/User');
 const config = require('config');
+const auth = require('../../middleware/auth');
+
+// @route GET api/users
+// @desc Get user info
+// @access Private
+router.get('/', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+
+        res.status(200).json({ user });
+    } catch (error) {
+        console.error(error.message);
+
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
 
 // @route POST api/users/register
 // @desc Register new user and return token
@@ -28,12 +44,14 @@ router.post(
         }
 
         const { name, email, password, gender } = req.body;
-
+        console.log(name, email, password, gender);
         try {
             let user = await User.findOne({ email });
 
             if (user) {
-                return res.status(400).json({ msg: 'User already exists' });
+                return res
+                    .status(400)
+                    .json({ errors: [{ msg: 'User already exists' }] });
             }
 
             user = new User({
@@ -61,7 +79,7 @@ router.post(
                 { expiresIn: 360000 },
                 (error, token) => {
                     if (error) throw error;
-                    res.status(200).json(token);
+                    res.status(200).json({ token });
                 }
             );
         } catch (error) {
@@ -91,13 +109,17 @@ router.post(
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).json({ msg: 'Invalid credentials' });
+            return res
+                .status(400)
+                .json({ errors: [{ msg: 'Invalid credentials' }] });
         }
 
-        const isMatch = bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            return res.status(400).json({ msg: 'Invalid credentials' });
+            return res
+                .status(400)
+                .json({ errors: [{ msg: 'Invalid credentials' }] });
         }
 
         const payload = {
@@ -112,7 +134,7 @@ router.post(
             { expiresIn: 360000 },
             (error, token) => {
                 if (error) throw error;
-                res.status(200).json(token);
+                res.status(200).json({ token });
             }
         );
     }
