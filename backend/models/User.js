@@ -20,6 +20,10 @@ const UserSchema = mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    dailyEntryGoal: {
+        type: Number,
+        default: 3
     }
 });
 

@@ -1,17 +1,25 @@
-import React, { Fragment } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Header, Divider, Form } from 'semantic-ui-react';
+import { postEntry } from '../../actions/entry';
+import { Redirect } from 'react-router-dom';
 
-const EntryForm = props => {
+const EntryForm = ({ postEntry, isAuthenticated }) => {
     const [formData, setFormData] = useState({
-        email: '',
-        password: ''
+        title: '',
+        content: ''
     });
 
-    const { email, password } = formData;
+    const { title, content } = formData;
 
     const onSubmit = () => {
-        loginUser({ email, password });
+        postEntry({ title, content });
+
+        setFormData({
+            title: '',
+            content: ''
+        });
     };
 
     const onChange = e => {
@@ -21,43 +29,42 @@ const EntryForm = props => {
         });
     };
 
-    if (isAuthenticated) {
-        return <Redirect to='/' />;
+    if (!isAuthenticated) {
+        return <Redirect to='/login' />;
     }
 
     return (
-        <Fragment>
-            <Header>Sign In</Header>
-            <Label>Please fill in the following fields</Label>
+        <>
+            <Header>Post an entry</Header>
             <Divider />
             <Form onSubmit={onSubmit}>
                 <Form.Input
-                    value={email}
+                    value={title}
                     onChange={e => onChange(e)}
-                    type='email'
-                    label='Email'
-                    name='email'
-                    required
+                    type='text'
+                    label='Title'
+                    name='title'
                 ></Form.Input>
-                <Form.Input
-                    value={password}
+                <Form.TextArea
+                    rows='20'
+                    value={content}
                     onChange={e => onChange(e)}
-                    type='password'
-                    label='Password'
-                    name='password'
-                    required
-                ></Form.Input>
-                <Form.Button primary>Login</Form.Button>
+                    label='Content'
+                    name='content'
+                    placeholder="What's on your mind?..."
+                ></Form.TextArea>
+                <Form.Button primary>Post</Form.Button>
             </Form>
-            <Divider />
-            <p>No account?</p>
-            <Link to='/register'>Sign up</Link>
-        </Fragment>
+        </>
     );
 };
 
-EntryForm.propTypes = {};
+EntryForm.propTypes = {
+    postEntry: PropTypes.func.isRequired
+};
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+});
 
-export default connect(mapStateToProps)(EntryForm);
+export default connect(mapStateToProps, { postEntry })(EntryForm);

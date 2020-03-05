@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Menu, Dropdown } from 'semantic-ui-react';
+import { Menu, Dropdown, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -19,13 +19,20 @@ const NavBar = ({ isAuthenticated, loading, logoutUser }) => {
 
     const userLinks = (
         <Fragment>
-            <Dropdown.Item>New Entry</Dropdown.Item>
-            <Dropdown.Item>View entries</Dropdown.Item>
+            <Dropdown.Item as={Link} to='/entry'>
+                New Entry
+            </Dropdown.Item>
+            <Dropdown.Item as={Link} to='/'>
+                View entries
+            </Dropdown.Item>
             <Dropdown.Item onClick={logoutUser}>Logout</Dropdown.Item>
         </Fragment>
     );
     return (
         <Menu attached='top' borderless size='huge'>
+            <Menu.Item position='left'>
+                <Header>Personal Journal</Header>
+            </Menu.Item>
             <Menu.Item position='right'>
                 <Dropdown icon='settings' direction='left'>
                     <Dropdown.Menu>
@@ -43,7 +50,7 @@ NavBar.propTypes = {
     logoutUser: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
     loading: state.auth.loading
 });

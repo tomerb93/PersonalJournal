@@ -60,4 +60,24 @@ router.get('/', auth, async (req, res) => {
     }
 });
 
+// @route DELETE api/entries/:entryId
+// @desc Delete entry by ID
+// @access Private
+router.delete('/:entryId', auth, async (req, res) => {
+    const { entryId } = req.params;
+
+    try {
+        const entry = await Entry.findByIdAndDelete(entryId);
+
+        if (entry) {
+            res.status(200).json({ msg: 'Deleted successfully' });
+        } else {
+            res.status(404).json({ msg: 'Entry not found' });
+        }
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
+
 module.exports = router;

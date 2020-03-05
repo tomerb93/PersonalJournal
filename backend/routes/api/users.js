@@ -7,6 +7,15 @@ const User = require('../../models/User');
 const config = require('config');
 const auth = require('../../middleware/auth');
 
+let jwtSecret;
+
+if (config.get('jwtSecret') === undefined) {
+    // production mode
+    jwtSecret = process.env.JWT_SECRET;
+} else {
+    jwtSecret = config.get('jwtSecret');
+}
+
 // @route GET api/users
 // @desc Get user info
 // @access Private
@@ -44,7 +53,6 @@ router.post(
         }
 
         const { name, email, password, gender } = req.body;
-        console.log(name, email, password, gender);
         try {
             let user = await User.findOne({ email });
 
@@ -75,7 +83,7 @@ router.post(
 
             jwt.sign(
                 payload,
-                config.get('jwtSecret'),
+                jwtSecret,
                 { expiresIn: 360000 },
                 (error, token) => {
                     if (error) throw error;
@@ -128,15 +136,10 @@ router.post(
             }
         };
 
-        jwt.sign(
-            payload,
-            config.get('jwtSecret'),
-            { expiresIn: 360000 },
-            (error, token) => {
-                if (error) throw error;
-                res.status(200).json({ token });
-            }
-        );
+        jwt.sign(payload, jwtSecret, { expiresIn: 360000 }, (error, token) => {
+            if (error) throw error;
+            res.status(200).json({ token });
+        });
     }
 );
 

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Header, Label, Divider } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -55,7 +55,7 @@ const Register = ({ setAlert, registerUser, isAuthenticated }) => {
     }
 
     return (
-        <Fragment>
+        <>
             <Header>Sign Up</Header>
             <Label>Please fill in the following fields</Label>
             <Divider />
@@ -126,7 +126,7 @@ const Register = ({ setAlert, registerUser, isAuthenticated }) => {
             <Divider />
             <p>Already have an account?</p>
             <Link to='/login'>Sign in</Link>
-        </Fragment>
+        </>
     );
 };
 

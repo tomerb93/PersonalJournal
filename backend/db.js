@@ -1,9 +1,18 @@
 const mongoose = require('mongoose');
 const config = require('config');
 
+let mongoURI;
+
+if (config.get('mongoURI') === undefined) {
+    // production mode
+    mongoURI = process.env.MONGO_URI;
+} else {
+    mongoURI = config.get('mongoURI');
+}
+
 const connectDatabase = async () => {
     try {
-        await mongoose.connect(config.get('mongoURI'), {
+        await mongoose.connect(mongoURI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,

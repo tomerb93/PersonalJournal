@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Header, Label, Divider } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -29,7 +29,7 @@ const Login = ({ loginUser, isAuthenticated }) => {
     }
 
     return (
-        <Fragment>
+        <>
             <Header>Sign In</Header>
             <Label>Please fill in the following fields</Label>
             <Divider />
@@ -55,7 +55,7 @@ const Login = ({ loginUser, isAuthenticated }) => {
             <Divider />
             <p>No account?</p>
             <Link to='/register'>Sign up</Link>
-        </Fragment>
+        </>
     );
 };
 

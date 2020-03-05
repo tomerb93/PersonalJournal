@@ -1,13 +1,24 @@
 const express = require('express');
-const connectDatabase = require('./config/db');
-const cors = require('cors');
+const connectDatabase = require('./db');
 const app = express();
 const path = require('path');
 
 connectDatabase();
 
 app.use(express.json({ extended: false }));
-app.use(cors());
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, x-auth-token'
+    );
+    res.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET, POST, PATCH, PUT, DELETE, OPTIONS'
+    );
+    next();
+});
 
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/entries', require('./routes/api/entries'));
