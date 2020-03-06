@@ -36,10 +36,12 @@ const EntryDailyProgress = ({ dailyEntryGoal, entries }) => {
     return (
         <>
             <Header>Your daily progress</Header>
-            <Progress percent={getProgressPercent().value} indicating />
-            <Header.Subheader>{`You've posted ${
+            <Progress
+                percent={getProgressPercent().value}
+                indicating
+            >{`You've posted ${
                 getProgressPercent().count
-            } out of ${dailyEntryGoal} entries.`}</Header.Subheader>
+            } out of ${dailyEntryGoal} entries.`}</Progress>
         </>
     );
 };
@@ -50,7 +52,7 @@ EntryDailyProgress.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    dailyEntryGoal: state.auth.user.dailyEntryGoal,
+    dailyEntryGoal: state.auth.user?.dailyEntryGoal,
     entries: state.entry.entries
 });
 

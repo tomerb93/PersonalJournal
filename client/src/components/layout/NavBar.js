@@ -19,11 +19,11 @@ const NavBar = ({ isAuthenticated, loading, logoutUser }) => {
 
     const userLinks = (
         <Fragment>
-            <Dropdown.Item as={Link} to='/entry'>
-                New Entry
-            </Dropdown.Item>
             <Dropdown.Item as={Link} to='/'>
                 View entries
+            </Dropdown.Item>
+            <Dropdown.Item as={Link} to='/entry'>
+                New Entry
             </Dropdown.Item>
             <Dropdown.Item onClick={logoutUser}>Logout</Dropdown.Item>
         </Fragment>
@@ -31,7 +31,9 @@ const NavBar = ({ isAuthenticated, loading, logoutUser }) => {
     return (
         <Menu attached='top' borderless size='huge'>
             <Menu.Item position='left'>
-                <Header>Personal Journal</Header>
+                <Header as={Link} to='/'>
+                    Personal Journal
+                </Header>
             </Menu.Item>
             <Menu.Item position='right'>
                 <Dropdown icon='settings' direction='left'>

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Header, Divider, Form } from 'semantic-ui-react';
-import { postEntry } from '../../actions/entry';
+import { postEntry, getEntries } from '../../actions/entry';
 import { Redirect } from 'react-router-dom';
 
-const EntryForm = ({ postEntry, isAuthenticated }) => {
+const EntryForm = ({ postEntry, isAuthenticated, history, getEntries }) => {
     const [formData, setFormData] = useState({
         title: '',
         content: ''
@@ -20,6 +20,10 @@ const EntryForm = ({ postEntry, isAuthenticated }) => {
             title: '',
             content: ''
         });
+
+        getEntries();
+
+        history.push('/');
     };
 
     const onChange = e => {
@@ -44,6 +48,7 @@ const EntryForm = ({ postEntry, isAuthenticated }) => {
                     type='text'
                     label='Title'
                     name='title'
+                    required
                 ></Form.Input>
                 <Form.TextArea
                     rows='20'
@@ -52,6 +57,7 @@ const EntryForm = ({ postEntry, isAuthenticated }) => {
                     label='Content'
                     name='content'
                     placeholder="What's on your mind?..."
+                    required
                 ></Form.TextArea>
                 <Form.Button primary>Post</Form.Button>
             </Form>
@@ -60,11 +66,12 @@ const EntryForm = ({ postEntry, isAuthenticated }) => {
 };
 
 EntryForm.propTypes = {
-    postEntry: PropTypes.func.isRequired
+    postEntry: PropTypes.func.isRequired,
+    getEntries: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStateToProps, { postEntry })(EntryForm);
+export default connect(mapStateToProps, { postEntry, getEntries })(EntryForm);

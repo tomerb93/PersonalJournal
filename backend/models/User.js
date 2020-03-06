@@ -23,7 +23,7 @@ const UserSchema = mongoose.Schema({
     },
     dailyEntryGoal: {
         type: Number,
-        default: 3
+        default: 1
     }
 });
 

@@ -75,6 +75,7 @@ export const loginUser = ({ email, password }) => async dispatch => {
             'Content-Type': 'application/json'
         }
     };
+    debugger;
 
     const body = JSON.stringify({ email, password });
 
